@@ -45,11 +45,13 @@ namespace PROShine
 #if DEBUG
             Console.WriteLine((sender as RichTextBox).Document.Blocks.Count.ToString());
 #endif
-            TextRange range = new TextRange((sender as RichTextBox).Document.ContentStart, (sender as RichTextBox).Document.ContentEnd);
-            if (range.Text.Length > 12000)
+            //Removing some messages to prevent lag.
+            TextRange range = new TextRange((sender as RichTextBox).Document.ContentStart, (sender as RichTextBox).Document.ContentEnd); //To get the richtextbox texts.
+            if (range.Text.Length > 12000)//Richtextbox text length
             {
-                if((sender as RichTextBox).Document.Blocks.Count >= 207)
+                if((sender as RichTextBox).Document.Blocks.Count >= 207)//if richtextbox got over or 207 blocks.
                 {
+                    //Detecting how many blocks we need to remove
                     string text = range.Text;
                     text = text.Substring(text.Length - 10000, 10000);
                     int index = text.IndexOf(Environment.NewLine);
@@ -57,19 +59,22 @@ namespace PROShine
                     {
                         text = text.Substring(index + Environment.NewLine.Length);
                     }
-                    long lines = extentions.Lines(text);
+                    long lines = Extentions.Lines(text);
                     int ln = Convert.ToInt32(lines);
                     ln = (sender as RichTextBox).Document.Blocks.Count - ln;
+                    //End of detection
                     for (int i = 0; i <= (sender as RichTextBox).Document.Blocks.Count - 1; i++)
                     {
-                        if (i <= ln && ln > 0)
+                        if (i <= ln && ln > 0) //Value to remove blocks
                         {
+                            //Removing blocks
                             (sender as RichTextBox).Document.Blocks.Remove((sender as RichTextBox).Document.Blocks.ToList()[i]);
                         }
                         else 
                         {
-                            if (i <= 168)
+                            if (i <= 48) //Default value
                             {
+                                //Removing blocks
                                 (sender as RichTextBox).Document.Blocks.Remove((sender as RichTextBox).Document.Blocks.ToList()[i]);
                             }
                         }
@@ -98,7 +103,8 @@ namespace PROShine
     }
 
     //Helper Class
-    public static class extentions
+    //Special Class to find out text lines
+    public static class Extentions
     {
         public static long Lines(this string s)
         {

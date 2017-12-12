@@ -1127,14 +1127,16 @@ namespace PROShine
         }
         private void AppendTextToRichTextBox(RichTextBox richTextBox,string author, string message)
         {
+            //I have got a lot of trash codes here
             bool gonZ = false;
-            if (message.Contains("Porygon-Z"))
+            if (message.Contains("Porygon-Z")) //Porygon-Z -> This Pokemon has one problem so checking does the chat contains this pokemon name
                 gonZ = true;
             int count = 0;
-            Regex linkRg = new Regex(@"\[([\dMF?,]+)\]<([\w]+)>\[-\]");
+            Regex linkRg = new Regex(@"\[([\dMF?,]+)\]<([\w]+)>\[-\]");//Finding out is there any Pokemon link or not in Chat.
             MatchCollection linkMatch = linkRg.Matches(message);
-            if (linkMatch.Count >= 0)
+            if (linkMatch.Count >= 0) //If we find any pokemon link in Chat.
             {
+                //Important things for checking Paragraphs can't explain.
                 Paragraph para;
                 TextRange r = new TextRange(richTextBox.Document.ContentStart, richTextBox.Document.ContentEnd);
                 //Console.WriteLine(r.Text.Length.ToString());
@@ -1142,9 +1144,9 @@ namespace PROShine
 #if DEBUG
                 Console.WriteLine(t.Length.ToString());
 #endif
+                //Important
                 if (t.Length > 0)
                 {
-
                     para = new Paragraph();
                     para.Margin = new Thickness(0);
                 }
@@ -1157,24 +1159,26 @@ namespace PROShine
                 para.Inlines.Add(new Run(author));
                 int position = message.LastIndexOf(']');
 
-                string[] help = Regex.Replace(message, @"\[([\dMF?,]+)\]<([\w]+)>\[-\]", "~").Split('~');
+                string[] help = Regex.Replace(message, @"\[([\dMF?,]+)\]<([\w]+)>\[-\]", "~").Split('~'); //Trying to get messages before and after of pokemon links.
 
-                string textBeforeAlllink = Regex.Replace(message, @"\[([\dMF?,]+)\]<([\w]+)>\[-\]", "~").Split('~')[0];
+                string textBeforeAlllink = Regex.Replace(message, @"\[([\dMF?,]+)\]<([\w]+)>\[-\]", "~").Split('~')[0]; //Message of before all pokemon links.
                 para.Inlines.Add(textBeforeAlllink);
 
                 string textAfterAllLink = "";
                 if (position > -1)
-                    textAfterAllLink = message.Substring(position + 1);
+                    textAfterAllLink = message.Substring(position + 1);//Message of after all pokemon links.
 
-                string textaftertcurrentlink = message;
+                string textaftertcurrentlink = message; //A helping string to find out messages after each pokemon links
                 if (textAfterAllLink != string.Empty)
                 {
+                    //Removing message after all links coz we don't need it in this string.
                     textaftertcurrentlink = textaftertcurrentlink.Replace(textAfterAllLink, "");
                 }
                 if (textBeforeAlllink != string.Empty)
                 {
+                    //Removing message before all links coz we don't need it in this string.
                     if (help.Length >= 0)
-                    {
+                    {                       
                         textaftertcurrentlink = textaftertcurrentlink.Remove(textaftertcurrentlink.IndexOf(help[0]));
                     }
                     else
@@ -1182,47 +1186,61 @@ namespace PROShine
                         textaftertcurrentlink = textaftertcurrentlink.Remove(textaftertcurrentlink.IndexOf(textBeforeAlllink));
                     }
                 }
+                //Links process
                 for (var i = 0; i <= linkMatch.Count - 1; i++)
                 {
-                    string url = "http://" + linkMatch[i].Value.Replace(",", "-").Substring(1, 75);
+                    string url = "http://" + linkMatch[i].Value.Replace(",", "-").Substring(1, 75); //Preparing links for uri else it will give an error.
+
                     Hyperlink link = new Hyperlink();
                     link.IsEnabled = true;
                     var pokeData = url.Substring(7, 75).Split('-');
+
                     if (gonZ && linkMatch[i].Value.ToLower().Contains("porygon-z"))
                     {
-                        link.Inlines.Add("<Porygon-Z>");
+                        link.Inlines.Add("<Porygon-Z>");//For Proygon-Z problem
                     }
                     else
                     {
+                        //Else
                         link.Inlines.Add("<" + linkMatch[i].Groups[2].Value + ">");
                     }
-                    link.NavigateUri = new Uri(url);
-                    if (pokeData[2] == "1")
+
+                    link.NavigateUri = new Uri(url);//Setting url for the link.
+
+                    if (pokeData[2] == "1")//If the link poke is Shiny we going to change the HyperLink Color
                     {
                         link.Foreground = Brushes.DeepPink;
                     }
-                    else if (pokeData[19] != "000")
+                    else if (pokeData[19] != "000")//If event poke changing HyperLink Color
                     {
                         link.Foreground = Brushes.DarkRed;
                     }
-                    else
+                    else 
                     {
+                        //Non event or shiny poke changing HyperLink Color
                         link.Foreground = Brushes.Aquamarine;
                     }
+                    //Setting fonts for the HyperLink
                     link.FontStyle = FontStyles.Italic;
+                    //Adding link to our paragraph
                     para.Inlines.Add(link);
+                    //Strat of Message after the pokemon link process.
                     textaftertcurrentlink = textaftertcurrentlink.Replace(linkMatch[i].Value, "");
                     if (textaftertcurrentlink.Length - 1 >= 0)
                     {
                         para.Inlines.Add(new Run(textaftertcurrentlink.Substring(0, textaftertcurrentlink.IndexOf("["))));
                         textaftertcurrentlink = textaftertcurrentlink.Substring(textaftertcurrentlink.IndexOf("["));
                     }
+                    //End of Message after the pokemon link process.
                 }
+                //Adding Message of after all pokemon links to paragraph.
                 para.Inlines.Add(new Run(textAfterAllLink));
+                //Adding Paragraph to our richtextbox
                 richTextBox.Document.Blocks.Add(para);
 
                 if (richTextBox.Selection.IsEmpty)
                 {
+                    //Important Settings
                     richTextBox.CaretPosition = richTextBox.Document.ContentEnd;
                     richTextBox.ScrollToEnd();
                 }

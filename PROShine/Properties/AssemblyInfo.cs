@@ -6,11 +6,11 @@ using System.Windows;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("PROShine Dark-Mode")]
+[assembly: AssemblyTitle("PROShine Dark-Version")]
 [assembly: AssemblyDescription("A free, open-source and advanced bot for Pokemon Revolution Online.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Silv3r")]
-[assembly: AssemblyProduct("PROShine Dark-Mode")]
+[assembly: AssemblyProduct("PROShine Dark-Version")]
 [assembly: AssemblyCopyright("Copyright © Silv3r, 2016-2032")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -50,7 +50,7 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2.8.0.3")]
-[assembly: AssemblyFileVersion("2.8.0.3")]
+[assembly: AssemblyVersion("2.7.1.2")]
+[assembly: AssemblyFileVersion("2.7.1.2")]
 [assembly: NeutralResourcesLanguage("en")]
 
