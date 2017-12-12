@@ -1179,11 +1179,11 @@ namespace PROShine
                     //Removing message before all links coz we don't need it in this string.
                     if (help.Length >= 0)
                     {                       
-                        textaftertcurrentlink = textaftertcurrentlink.Remove(textaftertcurrentlink.IndexOf(help[0]));
+                        textaftertcurrentlink = textaftertcurrentlink.Replace(help[0], "");
                     }
                     else
                     {
-                        textaftertcurrentlink = textaftertcurrentlink.Remove(textaftertcurrentlink.IndexOf(textBeforeAlllink));
+                        textaftertcurrentlink = textaftertcurrentlink.Replace(textBeforeAlllink, "");
                     }
                 }
                 //Links process
